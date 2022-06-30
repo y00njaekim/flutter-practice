@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_flutter/responsive/mobile_screen_layout.dart';
 import 'package:instagram_flutter/responsive/responsive_screen_layout.dart';
 import 'package:instagram_flutter/responsive/web_screen_layout.dart';
+import 'package:instagram_flutter/screens/login_screen.dart';
+import 'package:instagram_flutter/screens/signup_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 
 void main() async {
@@ -18,7 +20,7 @@ void main() async {
           storageBucket: "instagram-tutorial-a1ae6.appspot.com",
       ));
   } else {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(); 
   }
   runApp(const MyApp());
 }
@@ -34,8 +36,10 @@ class MyApp extends StatelessWidget {
         title: 'Instagram Clone',
         theme: ThemeData.dark()
             .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-        home: const ResponsiveLayout(
-            mobileScreenLayout: MobileScreenLayout(),
-            webScreenLayout: WebScreenLayout()));
+        // home: const ResponsiveLayout(
+        //     mobileScreenLayout: MobileScreenLayout(),
+        //     webScreenLayout: WebScreenLayout()),
+        home: SignupScreen(),
+    );
   }
 }
