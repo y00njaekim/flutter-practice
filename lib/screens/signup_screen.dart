@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/utils.dart';
 
 import '../widgets/text_field_input.dart';
 
@@ -16,6 +18,7 @@ class _LoginScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -24,6 +27,27 @@ class _LoginScreenState extends State<SignupScreen> {
     _passwordController.dispose();
     _bioController.dispose();
     _usernameController.dispose();
+  }
+
+  void signUpUser() async {
+    // ?(Question) setState 와 일반적인 변수 값 변경은 뭐가 다르지 ?
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        username: _usernameController.text,
+        bio: _bioController.text);
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (!mounted) return;
+    // ?(Question) context 는 어디서 오는거지 ?
+    if (res != "success") {
+      showSnackBar(res, context);
+    }
   }
 
   @override
@@ -93,6 +117,7 @@ class _LoginScreenState extends State<SignupScreen> {
                   height: 24,
                 ),
                 InkWell(
+                  onTap: signUpUser,
                   child: Container(
                     width: double.infinity,
                     alignment: Alignment.center,
@@ -101,7 +126,13 @@ class _LoginScreenState extends State<SignupScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                         color: blueColor),
-                    child: const Text("Log in"),
+                    child: _isLoading == true
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),
+                          )
+                        : const Text("Sign up"),
                   ),
                 ),
                 const SizedBox(
